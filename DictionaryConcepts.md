@@ -6,37 +6,25 @@
 
 - Git:
   
-  - a tool to track changes in repositories
+  - A tool to track changes in repositories
   
-  - a tool to 
+  - Exists locally
 
 - GitHub
   
-  - a navigator for using Git
+  - A management environment /navigator for repositories tracking timeline
   
-  - A management environment for repositories tracking timeline
+  - Uses git in the backgroud
+  
+  - Exists
 
-#### Start Git in project (repository)
+#### Start git in project (repository)
 
-
-
-#### Commit
-
-Different from 'save'! Whenever you want to keep the current version
+Only once in the repository, no need to reactivate in sub-folders
 
 ```bash
-user$ git commit -m "[meaningful message]"
+user$ git init
 ```
-
-#### Meaningful change:
-
-- **Why** was changed
-
-- **How** this addresses previous issues
-
-- **Effects** due to changes
-
-- **Limitations** of the change
 
 #### Git configurations
 
@@ -50,6 +38,26 @@ Add or change your information
 
 ```bash
 user$ git config --global user.name "Your Name"
-
 user$ git config --global user.email "you_email@domain.com"
 ```
+
+#### Commit
+
+Different from 'save'! Whenever you want to keep the current version, send it to `.git` folder
+
+```bash
+user$ git add file.md
+user$ git commit -m "[meaningful message]"
+```
+
+#### Meaningful message:
+
+- **Why** was changed
+
+- **How** this addresses previous issues
+
+- **Effects** due to changes
+
+- **Limitations** of the change
+
+#### 
