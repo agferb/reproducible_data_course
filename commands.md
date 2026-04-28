@@ -10,3 +10,6 @@ Add to local repository
 
 Push changes to remote repo
 `git push`
+
+Create new branch
+`git branch <branch_name>`
