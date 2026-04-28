@@ -305,3 +305,12 @@ git push --set-upstream origin <branch_name>
 ```
 
 Pushing from the 2nd time onwards just need to run `git push` in the branch.
+
+
+## 1.9. Collaboration and branch usage
+
+To work on your collaborator's project you have to clon their project, make a new branch with your initials, and edit the branch.
+
+Clon command:
+
+'git clone "ssh path to the collaborator's project"'
