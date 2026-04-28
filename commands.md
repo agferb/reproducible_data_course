@@ -11,4 +11,9 @@ Add to local repository
 Push changes to remote repo
 `git push`
 
+agferb:
 I am creating a conflict?
+
+ValeBurskaia:
+## Let it be a conflict! THE CONFLICT.
+## MORE CONFLICTS HERE
