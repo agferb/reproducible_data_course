@@ -74,10 +74,19 @@ Will open text editor to write a commit message.
 
 #### Change to other message editors
 
-```bash
-git config --global core.editor "nano"        # Nano
-git config --global core.editor "code --wait" # VSCode
-```
+- Nano (default, most realiable option):
+
+- ```bash
+  git config --global core.editor "nano"
+  ```
+
+- Use a specific editor:
+
+- ```bash
+  git config --global core.editor "<editor_name> --wait"
+  ```
+  
+  - In which `<editor_name>` can be `code` for VSCode or `cursor` for cursor.
 
 **In Nano:** add comments, press `Ctrl+X`, `Y` and `Enter`
 
@@ -177,7 +186,13 @@ Add SSH key and link it to GitHub.
 
 ```bash
 git remote add origin <github_repository>
+```
+
+```bash
 git remote set-url origin git@github.com:<username>/<repo>.git
+```
+
+```bash
 git push --set-upstream origin main
 ```
 
@@ -196,6 +211,14 @@ Your SSH key password will be asked, remember it!
 - ```bash
   git pull
   ```
+
+#### Delete connection to remote
+
+```bash
+git remote remove <name>
+```
+
+Usually `<name> = origin`, but sometimes it can be different. To check run `git remote`.
 
 ## 1.7. Undo
 
@@ -246,3 +269,27 @@ There are multiple ways of referencing the commits in the previous commands
   - `reset` requires `HEAD~1` or larger, being `~1` the previous commit to be returned to
   
   - `revert` understands `HEAD` as the current commit to be rewritten
+
+## 1.8. Alternative histories - Branches
+
+- Alternative commit history (independent from main branch)
+
+- 1 commit shared with main branch (branching point)
+
+- Good comments on the branch
+  
+  - Who created it
+  
+  - Why it was created
+  
+  - For what it should be used
+
+```bash
+git branch <branch_name>
+```
+
+How to move between branches:
+
+```bash
+git checkout <branch_to_go>
+```
