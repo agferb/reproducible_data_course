@@ -284,9 +284,13 @@ There are multiple ways of referencing the commits in the previous commands
   
   - For what it should be used
 
+#### Creating branches
+
 ```bash
 git branch <branch_name>
 ```
+
+If no name is provided, a list of all branches will be shown.
 
 How to move between branches:
 
