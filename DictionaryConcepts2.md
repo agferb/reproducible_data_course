@@ -305,3 +305,7 @@ git push --set-upstream origin <branch_name>
 ```
 
 Pushing from the 2nd time onwards just need to run `git push` in the branch.
+
+#### Mirror effect
+
+Changes or even entire files created inside a branch will become invisible when the branch is swapped.
