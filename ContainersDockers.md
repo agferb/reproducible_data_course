@@ -296,15 +296,114 @@ If there is more than 1 Dopckerfile in the directory, then:
 docker build -f Dockerfile.prod -t my_image:last_version .
 ```
 
-To check log history regarding the created image, you can check:
+To check the layers of the created image (including the ones from imported images to it), you can check:
 
 ```bash
 docker history <image-name:version> 
 ```
 
+#### Writing a Dockerfile
 
+The general specifications of a Dockerfile should be:
+
+- Install applications dependencies
+
+- Specify the container environment
+
+- Set up application directories
+
+- Define runtime configuration
+
+- Provide image metadata
+
+The link below explain most common commands of a Dockerfile: [How to Create Docker Image from Dockerfile | phoenixNAP KB](https://phoenixnap.com/kb/create-docker-images-with-dockerfile)
+
+General guidelines in writing recipes are:
+
+1. Build upon existing images
+
+2. Specify versions for tools, images and softwares
+
+3. Do proper formatting and documentation
+
+4. Keep size as low as possible
+
+5. Keep data outside image/container (mount them at run time)
+
+6. Check licenses
+
+7. Make the container discovarable
 
 ## 3.5. Apptainer Structure
+
+Apptainer is a more flexible alternative to Docker, which allows it to be used inside HPC structures. The table below compares both.
+
+| Docker                                                                         | Apptainer                                                           |
+| ------------------------------------------------------------------------------ | ------------------------------------------------------------------- |
+| :white_check_mark: Accessible through Desktop                                  | :x: Only accessible through a shell                                 |
+| :white_check_mark: Good support for all OS                                     | :x: Good support for Linux only                                     |
+| :white_check_mark: Enforces some reproducibility (Docker controls image files) | :x: Reproducibility is your burden                                  |
+| :white_check_mark: You have all permissions inside container                   | :x: Some features might need root (or sudo) permissions             |
+| :white_check_mark: Customized script for recipes                               | :x: bash-intensive recipes                                          |
+| :x: root permissions might caus disruptions                                    | :white_check_mark: Can be run as a simple user                      |
+| :x: Image is completely handled by docker                                      | :white_check_mark: Image is a file (or directory): easier to manage |
+| :x: Dependency on Docker to manage your system                                 | :white_check_mark: You manage your Containers structure             |
+| :x: Docker running in the background: high RAM usage                           | :white_check_mark: Easily portable                                  |
+| :x: Does **not** run in HPC                                                    | :white_check_mark: Runs in HPC                                      |
+
+#### Get Apptainer images
+
+Apptainer images are files. They don't need to have a specific format, but for reproducibility they are usually saved as `my_image.sif`. The Image repository also need to be specifed, either directly or by an URL.
+
+- Pulling from singularity hub:
+  
+  ```bash
+  apptainer pull <image-name>.sif shub://<registry/image> 
+  ```
+
+- Pulling from Docker hub:
+  
+  ```bash
+  apptainer pull <image-name>.sif docker://<registry/image:version>
+  ```
+
+- Pulling from URL:
+  
+  ```bash
+  apptainer pull <image-name>.sif <https://server.prg/image>
+  ```
+
+#### Inspect Images
+
+By default there are 2 types of inspections of apptainer images: one as in docker and another one as how the container output should bem which is called by:
+
+```bash
+apptainer inspect --runscript <image-name>.sif
+```
+
+<decribe better how the output of this command is>
+
+#### Manage Images
+
+Apptainer Images are files, so they are managed by the CLI:
+
+- Move or rename
+  
+  ```bash
+  mv <image>.sif /new/path/<new-name>.sif
+  ```
+
+- Check usage
+  
+  ```bash
+  tree --du -h -d -shaC
+  ```
+
+- Clean up
+  
+  ```bash
+  rm -f *.sif
+  ```
 
 ## 3.6. Mounted Volumes in Apptainer
 
