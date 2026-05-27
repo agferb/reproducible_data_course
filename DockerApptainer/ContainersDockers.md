@@ -228,7 +228,7 @@ docker run -v [local/path]:[/container/absolute/path] # Or --volume
 
 It is not necessary to mount the volume the Container working directory, but it needs to be consistent with the tasks you are running. The local path must be set in one of these ways:
 
-- Relative to workind directory: `./relative/path`
+- Relative to working directory: `./relative/path`
 
 - Relative to home: `~/relative/path`
 
@@ -249,7 +249,7 @@ Ports are a way to establish a communication with a webserver. Usually Container
 - **Temporary connection**: if you run the Container detached, you can run commands inside it afterwards with `exec`, and to access a server:
   
   ```bash
-  docker exec <webserver_image> curl localhost:80
+  docker exec <webserver_container> curl localhost:80
   ```
 
 - **Permanent connection**: to keep the port with the server open while the Container is running, you need to set the local host (or webserver) and the host inside the Container, and access it:
@@ -334,6 +334,26 @@ General guidelines in writing recipes are:
 
 7. Make the container discovarable
 
+#### Pushing Images to a registry
+
+To push images to Dockerhub (or any other registry), you first need to be logged in. Even if you are logged in the Docker desktop app, you should run to authenticate:
+
+```bash
+docker login
+```
+
+For reproducibility, the image should be tagged. You should include the namespace of your image (your registry username in standard cases), the repository of the image (the name for which it should be found) and its version. To push to a registry other than Dockerhub, it should also be specified.
+
+```bash
+docker tag <image> <registry>/<namespace>/<repository>:<version>
+```
+
+To push the image:
+
+```bash
+docker image push <image-tag>
+```
+
 ## 3.5. Apptainer Structure
 
 Apptainer is a more flexible alternative to Docker, which allows it to be used inside HPC structures. The table below compares both.
@@ -345,7 +365,7 @@ Apptainer is a more flexible alternative to Docker, which allows it to be used i
 | :white_check_mark: Enforces some reproducibility (Docker controls image files) | :x: Reproducibility is your burden                                  |
 | :white_check_mark: You have all permissions inside container                   | :x: Some features might need root (or sudo) permissions             |
 | :white_check_mark: Customized script for recipes                               | :x: bash-intensive recipes                                          |
-| :x: root permissions might caus disruptions                                    | :white_check_mark: Can be run as a simple user                      |
+| :x: root permissions might cause disruptions                                   | :white_check_mark: Can be run as a simple user                      |
 | :x: Image is completely handled by docker                                      | :white_check_mark: Image is a file (or directory): easier to manage |
 | :x: Dependency on Docker to manage your system                                 | :white_check_mark: You manage your Containers structure             |
 | :x: Docker running in the background: high RAM usage                           | :white_check_mark: Easily portable                                  |
@@ -373,6 +393,12 @@ Apptainer images are files. They don't need to have a specific format, but for r
   apptainer pull <image-name>.sif <https://server.prg/image>
   ```
 
+If there is a doubt wheter a file is an apptainer image or not, it can be checked through:
+
+```bash
+file <image>
+```
+
 #### Inspect Images
 
 By default there are 2 types of inspections of apptainer images: one as in docker and another one as how the container output should bem which is called by:
@@ -381,7 +407,7 @@ By default there are 2 types of inspections of apptainer images: one as in docke
 apptainer inspect --runscript <image-name>.sif
 ```
 
-<decribe better how the output of this command is>
+The `inspect --runscript` is more verbosed in apptainer, when the default `inspect` shows only basic information of the image.
 
 #### Manage Images
 
@@ -393,10 +419,16 @@ Apptainer Images are files, so they are managed by the CLI:
   mv <image>.sif /new/path/<new-name>.sif
   ```
 
-- Check usage
+- Check directory usage
   
   ```bash
   tree --du -h -d -shaC
+  ```
+
+- Check files usage
+  
+  ```bash
+  ls -lh
   ```
 
 - Clean up
@@ -405,6 +437,32 @@ Apptainer Images are files, so they are managed by the CLI:
   rm -f *.sif
   ```
 
+#### Run apptainer containers
+
+As a first-time run of a container, it is best practice to run it interactively (access system directory structure through bash):
+
+```bash
+apptainer shell <image>.sif
+```
+
+If not interactively, apptainer always run containers detached. This can be done through `run` in a similar way as in docker, though it can also be done through `exec`. As in docker, only with `exec` it is possible to run commands in a container already running in the background.
+
+```bash
+apptainer run <image>.sif <image-command>
+```
+
+```bash
+apptainer exec <image>.sif <image-command>
+```
+
 ## 3.6. Mounted Volumes in Apptainer
+
+By default, **volumes are already mounted** when a apptainer container is run. The mounting directory depends on system; in HPC, the user data (`$VSC_HOME`, `$VSC_DATA` and `$VSC_SCRATCH`) are mounted to `/kyukon`, and the remaining folder structure keeps both the HPC and the container folder structure, but without access.
+
+The directory you run the container will always be mounted to the container structure, but it is possible to mount other directories:
+
+```bash
+apptainer shell -B /path/in/host:/path/in/container <image>.sif
+```
 
 ## 3.7. Using Apptainer in HPC
